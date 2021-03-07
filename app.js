@@ -17,7 +17,7 @@ UI.prototype.addBookToList = (book) => {
 		<td>${book.title}</td>
 		<td>${book.author}</td>
 		<td>${book.isbn}</td>
-		<td><a href="#">x</a></td>
+		<td><a href="#" class="delete">x</a></td>
 	`;
 	list.appendChild(row); // append the row to the list
 };
@@ -45,9 +45,18 @@ UI.prototype.showAlert = (msg, elmClass) => {
 	}, 3000);
 };
 
+// * Remove the book from the list
+UI.prototype.removeBook = (target) => {
+	// if click target contain "delete" class then it target its parent and remove it
+	if (target.className === 'delete') {
+		target.parentElement.parentElement.remove();
+	}
+};
+
 // * Adding event to the form to get the value of input
 document.querySelector('#book-form').addEventListener('submit', (e) => {
 	// Get the input value
+
 	const title = document.querySelector('#title').value,
 		author = document.querySelector('#author').value,
 		isbn = document.querySelector('#isbn').value;
@@ -64,5 +73,13 @@ document.querySelector('#book-form').addEventListener('submit', (e) => {
 		ui.clearInput(); // Clear the input data
 	}
 
+	e.preventDefault();
+});
+
+// * event to remove the book from the list
+document.querySelector('#book-list').addEventListener('click', (e) => {
+	const ui = new UI();
+	ui.removeBook(e.target);
+	ui.showAlert('Book Successfully removed !', 'success');
 	e.preventDefault();
 });
